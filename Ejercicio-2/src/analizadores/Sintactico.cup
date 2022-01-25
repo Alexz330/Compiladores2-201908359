@@ -1,0 +1,89 @@
+/*
+ * Ejemplo desarrollado por Erick Navarro
+ * Blog: e-navarro.blogspot.com
+ * Julio - 2018
+ */
+
+package analizadores; 
+import java_cup.runtime.*;
+import java.util.ArrayList;
+
+parser code 
+{:
+    /**
+     * Método al que se llama automáticamente ante algún error sintactico.
+     **/
+     
+    static int contador1;
+    static int contador0;
+
+    public void syntax_error(Symbol s){ 
+        System.out.println("Error Sintáctico en la Línea " + (s.left) +
+        " Columna "+s.right+ ". No se esperaba este componente: " +s.value+"."); 
+    } 
+
+    /**
+     * Método al que se llama automáticamente ante algún error sintáctico 
+     * en el que ya no es posible una recuperación de errores.
+     **/ 
+    public void unrecovered_syntax_error(Symbol s) throws java.lang.Exception{ 
+        System.out.println("Error síntactico irrecuperable en la Línea " + 
+        (s.left)+ " Columna "+s.right+". Componente " + s.value + 
+        " no reconocido."); 
+    }  
+    
+    public void validar(String cadena){
+           String[] str_arr = cadena.split("");
+           for (String ch : str_arr) {
+            if(ch.equals("1")){
+                contador1++;
+            }
+            else {
+                contador0++;
+            }
+        }
+    }
+    public void imprimir(){
+            System.out.println(String.valueOf(contador1)+" veces 1, "+ String.valueOf(contador0)+" veces 0"); 
+            
+    }
+
+:} 
+
+terminal String PTCOMA,PARIZQ,PARDER,CORIZQ,CORDER;
+terminal String MAS,MENOS,POR,DIVIDIDO;
+terminal String ENTERO;
+terminal String DECIMAL;
+terminal String UMENOS;
+terminal String REVALUAR;
+terminal String comma;
+terminal String CEROUNO;
+
+non terminal ini;
+non terminal instrucciones;
+non terminal instruccion;
+non terminal Double expresion;
+non terminal CEROSUNOS;
+
+
+
+precedence left MAS,MENOS;
+precedence left POR,DIVIDIDO;
+precedence right UMENOS; 
+
+start with ini; 
+
+ini::=instrucciones;
+
+instrucciones ::= 
+   instruccion instrucciones
+ | instruccion
+
+ | CEROSUNOS {:imprimir();:}
+; 
+
+
+CEROSUNOS ::= CEROUNO :a CEROSUNOS  {:validar(a); :}
+    | CEROUNO:a {:validar(a);:}
+;
+
