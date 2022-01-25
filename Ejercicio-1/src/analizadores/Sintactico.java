@@ -6,6 +6,7 @@
 package analizadores;
 
 import java_cup.runtime.*;
+import java.util.LinkedList;
 import java_cup.runtime.XMLElement;
 
 /** CUP v0.11b 20160615 (GIT 4ac7450) generated parser.
@@ -132,7 +133,9 @@ public class Sintactico extends java_cup.runtime.lr_parser {
 
     /**
      * Método al que se llama automáticamente ante algún error sintactico.
-     **/ 
+     **/
+     
+    public static LinkedList <String> ArrayPalabras = new LinkedList<String>(); 
     public void syntax_error(Symbol s){ 
         System.out.println("Error Sintáctico en la Línea " + (s.left) +
         " Columna "+s.right+ ". No se esperaba este componente: " +s.value+"."); 
@@ -147,6 +150,16 @@ public class Sintactico extends java_cup.runtime.lr_parser {
         (s.left)+ " Columna "+s.right+". Componente " + s.value + 
         " no reconocido."); 
     }  
+
+       public void imprimir(){
+        for(String element: ArrayPalabras ){
+            System.out.println(element);
+               
+        }
+        System.out.println("\n");
+
+    }
+
 
 
 /** Cup generated class to encapsulate user supplied action code.*/
@@ -251,7 +264,7 @@ class CUP$Sintactico$actions {
 		int aleft = ((java_cup.runtime.Symbol)CUP$Sintactico$stack.peek()).left;
 		int aright = ((java_cup.runtime.Symbol)CUP$Sintactico$stack.peek()).right;
 		String a = (String)((java_cup.runtime.Symbol) CUP$Sintactico$stack.peek()).value;
-		System.out.println(a);
+		ArrayPalabras.add(a); imprimir();
               CUP$Sintactico$result = parser.getSymbolFactory().newSymbol("PALABRAS",4, ((java_cup.runtime.Symbol)CUP$Sintactico$stack.elementAt(CUP$Sintactico$top-2)), ((java_cup.runtime.Symbol)CUP$Sintactico$stack.peek()), RESULT);
             }
           return CUP$Sintactico$result;
@@ -263,7 +276,7 @@ class CUP$Sintactico$actions {
 		int aleft = ((java_cup.runtime.Symbol)CUP$Sintactico$stack.peek()).left;
 		int aright = ((java_cup.runtime.Symbol)CUP$Sintactico$stack.peek()).right;
 		String a = (String)((java_cup.runtime.Symbol) CUP$Sintactico$stack.peek()).value;
-		System.out.println(a);
+		 ArrayPalabras.add(a); imprimir(); 
               CUP$Sintactico$result = parser.getSymbolFactory().newSymbol("PALABRAS",4, ((java_cup.runtime.Symbol)CUP$Sintactico$stack.peek()), ((java_cup.runtime.Symbol)CUP$Sintactico$stack.peek()), RESULT);
             }
           return CUP$Sintactico$result;

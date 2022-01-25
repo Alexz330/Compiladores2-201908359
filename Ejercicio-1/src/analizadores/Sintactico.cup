@@ -6,12 +6,15 @@
 
 package analizadores; 
 import java_cup.runtime.*;
+import java.util.LinkedList;
 
 parser code 
 {:
     /**
      * Método al que se llama automáticamente ante algún error sintactico.
-     **/ 
+     **/
+     
+    public static LinkedList <String> ArrayPalabras = new LinkedList<String>(); 
     public void syntax_error(Symbol s){ 
         System.out.println("Error Sintáctico en la Línea " + (s.left) +
         " Columna "+s.right+ ". No se esperaba este componente: " +s.value+"."); 
@@ -27,7 +30,15 @@ parser code
         " no reconocido."); 
     }  
 
-    
+       public void imprimir(){
+        for(String element: ArrayPalabras ){
+            System.out.println(element);
+               
+        }
+        System.out.println("\n");
+
+    }
+
 :} 
 
 terminal String PTCOMA,PARIZQ,PARDER,CORIZQ,CORDER;
@@ -67,8 +78,8 @@ instruccion ::=
 ;
 
 PALABRAS ::= 
-    PALABRAS comma PALABRA:a {:System.out.println(a);:}
-    | PALABRA:a {:System.out.println(a);:}
+    PALABRAS comma PALABRA:a {:ArrayPalabras.add(a); imprimir();:}
+    | PALABRA:a {: ArrayPalabras.add(a); imprimir(); :}
 ;
 
 expresion  ::= 
