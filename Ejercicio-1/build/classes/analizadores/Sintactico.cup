@@ -6,7 +6,7 @@
 
 package analizadores; 
 import java_cup.runtime.*;
-import java.util.LinkedList;
+import java.util.ArrayList;
 
 parser code 
 {:
@@ -14,7 +14,7 @@ parser code
      * Método al que se llama automáticamente ante algún error sintactico.
      **/
      
-    public static LinkedList <String> ArrayPalabras = new LinkedList<String>(); 
+    public static ArrayList<String>  ArrayPalabras = new ArrayList<String>(); 
     public void syntax_error(Symbol s){ 
         System.out.println("Error Sintáctico en la Línea " + (s.left) +
         " Columna "+s.right+ ". No se esperaba este componente: " +s.value+"."); 
@@ -31,11 +31,13 @@ parser code
     }  
 
        public void imprimir(){
-        for(String element: ArrayPalabras ){
-            System.out.println(element);
-               
+        
+        for(int i = 0; i<ArrayPalabras.size()-1;i++){
+
+            System.out.println(ArrayPalabras.get(i+1));
         }
-        System.out.println("\n");
+        
+        System.out.println(ArrayPalabras.get(0));
 
     }
 
@@ -70,7 +72,7 @@ instrucciones ::=
    instruccion instrucciones
  | instruccion
  | error instrucciones
- | PALABRAS
+ | PALABRAS {:imprimir();:}
 ; 
 
 instruccion ::= 
@@ -78,8 +80,8 @@ instruccion ::=
 ;
 
 PALABRAS ::= 
-    PALABRAS comma PALABRA:a {:ArrayPalabras.add(a); imprimir();:}
-    | PALABRA:a {: ArrayPalabras.add(a); imprimir(); :}
+    PALABRAS comma PALABRA:a {:ArrayPalabras.add(a); :}
+    | PALABRA:a {: ArrayPalabras.add(a);  :}
 ;
 
 expresion  ::= 
