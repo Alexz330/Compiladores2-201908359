@@ -1,0 +1,41 @@
+/*
+ * Ejemplo desarrollado por Erick Navarro
+ * Blog: e-navarro.blogspot.com
+ * Julio - 2018
+ */
+
+package analizadores;
+import java_cup.runtime.Symbol; 
+
+%% 
+%class Lexico
+%public 
+%line 
+%char 
+%cup 
+%unicode
+%ignorecase
+
+%init{ 
+    yyline = 1; 
+    yychar = 1; 
+%init} 
+
+CEROUNO = (1|0)*(.(1|0)*)?
+%%
+
+
+
+
+"." {return new Symbol(sym.PUNTO,yyline,yychar, yytext());}
+
+\n {yychar=1;}
+
+
+{CEROUNO} {return new Symbol(sym.CEROUNO,yyline,yychar, yytext());}
+
+
+. {
+    System.out.println("Este es un error lexico: "+yytext()+
+    ", en la linea: "+yyline+", en la columna: "+yychar);
+}

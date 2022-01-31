@@ -1,0 +1,146 @@
+/*
+ * Ejemplo desarrollado por Erick Navarro
+ * Blog: e-navarro.blogspot.com
+ * Julio - 2018
+ */
+
+package analizadores; 
+import java_cup.runtime.*;
+import java.util.ArrayList;
+
+parser code 
+{:
+    /**
+     * Método al que se llama automáticamente ante algún error sintactico.
+     **/
+     
+    static int contador1;
+    static int contador0;
+
+    public void syntax_error(Symbol s){ 
+        System.out.println("Error Sintáctico en la Línea " + (s.left) +
+        " Columna "+s.right+ ". No se esperaba este componente: " +s.value+"."); 
+    } 
+
+    /**
+     * Método al que se llama automáticamente ante algún error sintáctico 
+     * en el que ya no es posible una recuperación de errores.
+     **/ 
+    public void unrecovered_syntax_error(Symbol s) throws java.lang.Exception{ 
+        System.out.println("Error síntactico irrecuperable en la Línea " + 
+        (s.left)+ " Columna "+s.right+". Componente " + s.value + 
+        " no reconocido."); 
+    }  
+    
+ 
+
+
+
+    public static void convertidor(String cadena) {
+
+        String antesPunto = "";
+        String despuesPunto = "";
+        Boolean banderita = false;
+
+        for (int i = 0; i < cadena.length(); i++) {
+
+            if (cadena.charAt(i) == '.') {
+                banderita = true;
+                continue;
+            }
+            if (banderita) {
+                despuesPunto += cadena.charAt(i);
+            } else {
+                antesPunto += cadena.charAt(i);
+            }
+
+        }
+        
+        if(despuesPunto.length()>0){
+            long numeroSinDecimal = convertirBinarioDecimal2(antesPunto);
+            float numeroConDecimal = convertirBinarioDecimal1(despuesPunto);
+            
+            System.out.println(numeroConDecimal+numeroSinDecimal);
+            
+        }else if(despuesPunto.length() == 0){
+            long numeroSinDecimal = convertirBinarioDecimal2(antesPunto);
+            
+            System.out.println(numeroSinDecimal);
+        }
+        
+        
+       
+    }
+
+    public static float convertirBinarioDecimal1(String binario) {
+        // A este número le vamos a sumar cada valor binario
+        float decimal = 0;
+        int posicion = 1;
+        // Recorrer la cadena...
+        for (int x = 0 ; x < binario.length(); x++) {
+            // Saber si es 1 o 0; primero asumimos que es 1 y abajo comprobamos
+            short digito = 1;
+            if (binario.charAt(x) == '0') {
+                digito = 0;
+            }
+
+           
+            double multiplicador = Math.pow(2, -posicion);
+            decimal += digito * multiplicador;
+            posicion++;
+        }
+        return decimal;
+    }
+    
+    
+      public static long convertirBinarioDecimal2(String binario) {
+        // A este número le vamos a sumar cada valor binario
+        long decimal = 0;
+        int posicion = 0;
+        // Recorrer la cadena...
+        for (int x = binario.length() - 1; x >= 0; x--) {
+            // Saber si es 1 o 0; primero asumimos que es 1 y abajo comprobamos
+            short digito = 1;
+            if (binario.charAt(x) == '0') {
+                digito = 0;
+            }
+
+        
+            double multiplicador = Math.pow(2, posicion);
+            decimal += digito * multiplicador;
+            posicion++;
+        }
+        return decimal;
+    }
+
+:} 
+
+
+terminal String PUNTO;
+terminal String CEROUNO;
+
+non terminal ini;
+non terminal instrucciones;
+non terminal instruccion;
+non terminal Double expresion;
+non terminal CEROSUNOS;
+
+
+
+
+start with ini; 
+
+ini::=instrucciones;
+
+instrucciones ::= 
+   instruccion instrucciones
+ | instruccion
+
+ | CEROSUNOS {::}
+; 
+
+
+CEROSUNOS ::= CEROUNO :a CEROSUNOS  {:convertidor(a);:}
+    | CEROUNO:a {: convertidor(a); :}
+;
+
