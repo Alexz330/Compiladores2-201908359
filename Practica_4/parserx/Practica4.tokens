@@ -1,0 +1,8 @@
+PARA=1
+PARC=2
+COMA=3
+NUMBER=4
+WHITESPACE=5
+'('=1
+')'=2
+','=3
